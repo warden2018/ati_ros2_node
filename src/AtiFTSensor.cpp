@@ -65,7 +65,7 @@ bool AtiFTSensor::initialize()
   local_address_.sin_port = htons(49152);
 
   remote_address_.sin_family = AF_INET;
-  inet_aton("192.168.4.1",&(remote_address_.sin_addr));
+  inet_aton("192.168.1.1",&(remote_address_.sin_addr));
   remote_address_.sin_port = htons(49152);
 
   socket_ = rt_dev_socket(AF_INET, SOCK_DGRAM, 0);

@@ -28,12 +28,21 @@ find_package(ament_cmake REQUIRED)
 find_package(mpi_cmake_modules REQUIRED)
 find_package(real_time_tools REQUIRED)
 find_package(Boost REQUIRED)
+find_package(rclcpp REQUIRED)
+find_package(rclcpp_lifecycle REQUIRED)
+find_package(std_msgs REQUIRED)
+find_package(geometry_msgs REQUIRED)
 
 set(Xenomai_additionnal_INCLUDE_DIR)
 if(${CURRENT_OS} MATCHES "xenomai")
   set(Xenomai_additionnal_INCLUDE_DIR /usr/local/rtnet/include
                                       /usr/src/rtnet/stack/include)
 endif()
+
+set(THIS_PACKAGE_INCLUDE_DEPENDS
+  std_msgs
+  geometry_msgs
+)
 
 # export de dependencies
 ament_export_dependencies(Boost real_time_tools)
@@ -47,6 +56,9 @@ set(all_exe_targets)
 # Add the main library
 #
 # Create the CMake target
+
+
+
 add_library(${PROJECT_NAME} SHARED src/AtiFTSensor.cpp)
 # Add the include dependencies
 target_include_directories(
@@ -57,6 +69,11 @@ target_include_directories(
 # Link the dependencies
 ament_target_dependencies(${PROJECT_NAME} Boost)
 ament_target_dependencies(${PROJECT_NAME} Threads)
+
+ament_target_dependencies(${PROJECT_NAME}
+  rclcpp 
+  ${THIS_PACKAGE_INCLUDE_DEPENDS}
+)
 target_link_libraries(${PROJECT_NAME} real_time_tools::real_time_tools)
 target_link_libraries(${PROJECT_NAME} ${Xenomai_LIBS})
 # For the installation
@@ -74,6 +91,18 @@ endif()
 add_executable(ati_ft_sensor_test_sensor tests/test_sensor.cpp)
 target_link_libraries(ati_ft_sensor_test_sensor ${PROJECT_NAME})
 list(APPEND all_exe_targets ati_ft_sensor_test_sensor)
+
+
+add_executable(ati_ros_node
+  src/ati_ros_node.cpp
+)
+
+
+target_link_libraries(ati_ros_node 
+  ${PROJECT_NAME})
+list(APPEND all_exe_targets ati_ros_node)
+
+
 
 #
 # building documentation

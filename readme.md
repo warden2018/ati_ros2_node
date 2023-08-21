@@ -81,6 +81,13 @@ The output would be like
   -0.03      0.03      -0.01      0.00      0.00      -0.00 
   ```
 
+### Use it as an ROS2 node
+![how to make real time work](https://docs.ros.org/en/foxy/Tutorials/Demos/Real-Time-Programming.html)
+
+See `Setting permissions for the scheduler` chapter.
+
+This node is publishing 
+
 ### Hardware specs
 You can find more detail in below links:
 - [Datasheet](doc/mini_40_datasheet.pdf)
